@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data server</title>
+<link rel="icon" href="/ui/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/ui/style.css">
+<script src="/ui/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img src="/ui/favicon.svg" alt="" width="30" height="30">
+    <span>Data server</span>
+  </div>
+  <div id="who" class="who" hidden>
+    <span id="who-badge" class="badge"></span>
+    <button type="button" id="logout" class="btn ghost">Log out</button>
+  </div>
+</header>
+
+<main>
+  <section id="login-view" class="card narrow">
+    <h2>Sign in</h2>
+    <form id="login-form" autocomplete="off">
+      <label for="token">Access token</label>
+      <input id="token" type="password" required spellcheck="false" autocomplete="off">
+      <button type="submit" class="btn primary">Sign in</button>
+      <p id="login-error" class="error" role="alert" hidden></p>
+      <p class="hint">Use an app token to manage that app, or the admin token for everything. The admin token only works from allowed networks.</p>
+    </form>
+  </section>
+
+  <div id="main-view" hidden>
+    <section id="system" class="card" hidden>
+      <h2>Storage</h2>
+      <div class="stats">
+        <div class="stat wide">
+          <div class="stat-head"><span>Disk</span><span id="disk-text">…</span></div>
+          <progress id="disk-meter" max="100" value="0"></progress>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Free</span>
+          <strong id="disk-free">…</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Stored by apps</span>
+          <strong id="stored-text">…</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Files</h2>
+        <div class="toolbar">
+          <input id="prefix" type="text" spellcheck="false" placeholder="Filter by key prefix, e.g. logs/" aria-label="Key prefix">
+          <button type="button" id="refresh" class="btn ghost">Refresh</button>
+        </div>
+      </div>
+
+      <div id="apps" class="tabs" role="tablist" aria-label="Apps"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><button type="button" class="sort" data-col="key">Key</button></th>
+              <th class="num"><button type="button" class="sort" data-col="size">Size</button></th>
+              <th class="col-type"><button type="button" class="sort" data-col="content_type">Type</button></th>
+              <th class="col-date"><button type="button" class="sort" data-col="modified">Modified</button></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p id="empty" class="empty" hidden>No files here yet. Drop some below.</p>
+      <p id="summary" class="hint"></p>
+    </section>
+
+    <section id="drop" class="card drop">
+      <h2>Upload</h2>
+      <p class="drop-text">Drop files anywhere on this card, or</p>
+      <input id="files" type="file" multiple>
+      <ul id="queue" class="queue"></ul>
+      <label for="key">Key (when uploading a single file)</label>
+      <input id="key" type="text" spellcheck="false" placeholder="chosen from the file name">
+      <p class="hint">With several files, each is stored as the key prefix above plus its file name. Allowed key characters: letters, digits, <code>. _ -</code> and <code>/</code>. Maximum size per file: <span id="max-size"></span>.</p>
+      <div class="actions-row">
+        <button type="button" id="upload" class="btn primary">Upload</button>
+        <progress id="progress" max="100" value="0" hidden></progress>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>

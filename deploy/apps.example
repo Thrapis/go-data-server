@@ -1,0 +1,13 @@
+# /etc/go-data-server/apps — one line per app: <app> <sha256-hex of its token>
+#
+# Create a line with:  /opt/go-data-server/go-data-server newtoken <app>
+# It prints the token once (give it to the app) and the line to paste here. Only hashes are
+# stored, so this file can't be turned back into tokens. After editing: systemctl reload go-data-server
+#
+# App names: a-z, 0-9 and "-", up to 64 characters.
+#
+# "_admin" is the token for the web UI. It can manage every app, but only from the networks
+# in DATA_UI_ALLOW_CIDR.
+#
+# alpha  0000000000000000000000000000000000000000000000000000000000000000
+# _admin 1111111111111111111111111111111111111111111111111111111111111111

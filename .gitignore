@@ -1,0 +1,8 @@
+# build output and Go build cache (scripts/build.ps1 keeps the cache here)
+dist/
+.cache/
+
+# runtime data and real token files; only deploy/apps.example is tracked
+data/
+/apps
+*.pem

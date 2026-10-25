@@ -1,0 +1,32 @@
+[Unit]
+Description=go-data-server (shared key-value/blob store)
+After=network.target
+
+[Service]
+# Create first:  sudo useradd --system --no-create-home --shell /usr/sbin/nologin data
+User=data
+Group=data
+ExecStart=/opt/go-data-server/go-data-server
+# Re-reads the apps file and checks the certificate right away (no restart, no dropped uploads).
+ExecReload=/bin/kill -HUP $MAINPID
+# /etc/go-data-server.env holds the DATA_* settings, see README.md. It contains no secrets.
+EnvironmentFile=/etc/go-data-server.env
+# Creates /var/lib/go-data-server owned by the service user.
+StateDirectory=go-data-server
+Environment=DATA_DIR=/var/lib/go-data-server
+Environment=DATA_APPS_FILE=/etc/go-data-server/apps
+Restart=on-failure
+RestartSec=3
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
